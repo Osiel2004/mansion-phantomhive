@@ -31,7 +31,7 @@ resource "aws_dynamodb_table" "registro_pedidos" {
   hash_key       = "pedido_id"
 
   attribute {
-    name = "pedido_id"
+    name = "pedido_id" 
     type = "S"
   }
 }
