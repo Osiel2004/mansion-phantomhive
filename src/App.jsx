@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="mansion-container">
       <header>
-        <h1>Mansión Phantomhive</h1>
+        <h1>Mansión Phantomhive!</h1>
         <p>Catálogo de Artículos Exclusivos</p>
       </header>
 
