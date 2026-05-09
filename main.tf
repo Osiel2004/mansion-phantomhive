@@ -42,7 +42,7 @@ resource "aws_cognito_user_pool" "pool_usuarios" {
 
   # Forzamos que el login y el registro sean con correo electrónico
   username_attributes      = ["email"]
-  auto_verified_attributes = ["email"]
+  auto_verified_attributes = ["email"] 
 
   password_policy {
     minimum_length    = 8
