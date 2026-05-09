@@ -40,6 +40,9 @@ resource "aws_dynamodb_table" "registro_pedidos" {
 resource "aws_cognito_user_pool" "pool_usuarios" {
   name = "phantomhive_users"
 
+  # ¡ESTA ES LA LÍNEA NUEVA! Le dice a AWS que verifique los correos automáticamente
+  auto_verified_attributes = ["email"]
+
   password_policy {
     minimum_length    = 8
     require_lowercase = true
