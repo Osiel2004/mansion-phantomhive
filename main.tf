@@ -93,3 +93,19 @@ resource "aws_amplify_branch" "main_branch" {
 output "amplify_app_url" {
   value = aws_amplify_app.web_app.default_domain
 }
+
+# Cliente de la aplicación para que React se conecte
+resource "aws_cognito_user_pool_client" "app_client" {
+  name         = "phantomhive_react_client"
+  user_pool_id = aws_cognito_user_pool.pool_usuarios.id
+  generate_secret = false # Debe ser false para aplicaciones web React
+}
+
+# Salidas para obtener los IDs necesarios
+output "cognito_user_pool_id" {
+  value = aws_cognito_user_pool.pool_usuarios.id
+}
+
+output "cognito_client_id" {
+  value = aws_cognito_user_pool_client.app_client.id
+}
