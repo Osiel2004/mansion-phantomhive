@@ -36,19 +36,27 @@ resource "aws_dynamodb_table" "registro_pedidos" {
   }
 }
 
-# 3. Cognito: User Pool para autenticación de usuarios
+# 3. Cognito: User Pool para autenticación de usuarios (Versión 2 - Corregida)
 resource "aws_cognito_user_pool" "pool_usuarios" {
-  name = "phantomhive_users"
+  name = "phantomhive_users_v2" # Cambiamos el nombre para forzar una creación limpia
 
-  # ¡ESTA ES LA LÍNEA NUEVA! Le dice a AWS que verifique los correos automáticamente
+  # Forzamos que el login y el registro sean con correo electrónico
+  username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
 
   password_policy {
-    minimum_length    = 8 
+    minimum_length    = 8
     require_lowercase = true
     require_numbers   = true
     require_uppercase = true
     require_symbols   = false
+  }
+
+  # Le decimos a AWS exactamente cómo debe ser el correo que enviará
+  verification_message_template {
+    default_email_option = "CONFIRM_WITH_CODE"
+    email_subject        = "Código de acceso - Mansión Phantomhive"
+    email_message        = "Tu código de verificación para entrar a la mansión es {####}."
   }
 }
 
