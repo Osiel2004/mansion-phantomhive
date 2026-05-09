@@ -107,9 +107,16 @@ output "amplify_app_url" {
 
 # Cliente de la aplicación para que React se conecte
 resource "aws_cognito_user_pool_client" "app_client" {
-  name         = "phantomhive_react_client"
-  user_pool_id = aws_cognito_user_pool.pool_usuarios.id
-  generate_secret = false # Debe ser false para aplicaciones web React
+  name            = "phantomhive_react_client"
+  user_pool_id    = aws_cognito_user_pool.pool_usuarios.id
+  generate_secret = false 
+  
+  # ¡ESTA ES LA CLAVE! Le damos permiso al cliente de procesar contraseñas
+  explicit_auth_flows = [
+    "ALLOW_USER_SRP_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+    "ALLOW_USER_PASSWORD_AUTH"
+  ]
 }
 
 # Salidas para obtener los IDs necesarios
