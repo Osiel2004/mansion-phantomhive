@@ -8,7 +8,7 @@ import './App.css';
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolId: 'us-east-1_1VEYNSxJS',      // Ej: us-east-1_xxxxxxxxx
+      userPoolId: 'us-east-1_u4CTFLq9U',      // Ej: us-east-1_xxxxxxxxx
       userPoolClientId: '448a06m1c5kqtbu7l3fjr5rii6', // Ej: 1234567890abcdefghijklmno
     }
   }
