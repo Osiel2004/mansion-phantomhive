@@ -1,0 +1,29 @@
+body {
+  background-color: #121212;
+  color: #eaeaea;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+.mansion-container { max-width: 900px; margin: 0 auto; }
+header { text-align: center; border-bottom: 2px solid #d4af37; margin-bottom: 20px; padding-bottom: 10px; }
+h1 { color: #d4af37; margin: 0; }
+.catalogo { display: flex; gap: 20px; justify-content: space-between; flex-wrap: wrap; }
+.tarjeta-producto {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  padding: 20px;
+  border-radius: 8px;
+  width: 30%;
+  text-align: center;
+}
+.tarjeta-producto h3 { margin-top: 0; }
+.precio { color: #d4af37; font-size: 1.2rem; margin-bottom: 15px; }
+button {
+  background-color: #d4af37; color: #121212;
+  border: none; padding: 10px 15px; border-radius: 4px;
+  cursor: pointer; font-weight: bold;
+  transition: background-color 0.3s;
+}
+button:hover { background-color: #b5952f; }
+.carrito { margin-top: 40px; background-color: #1e1e1e; padding: 20px; border-radius: 8px; border-left: 4px solid #d4af37; }
