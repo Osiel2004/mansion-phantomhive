@@ -31,7 +31,7 @@ function App() {
 
   return (
     // 2. Envolvemos la App en el Autenticador
-    <Authenticator>
+    <Authenticator loginMechanisms={['email']}>
       {({ signOut, user }) => (
         <div className="mansion-container">
           <header>
