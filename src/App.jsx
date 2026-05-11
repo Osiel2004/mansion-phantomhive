@@ -103,7 +103,7 @@ function App() {
           {/* Header con navegación */}
           <header className="main-header">
             <div className="header-content">
-              <h1>👔 Elite Fashion Store</h1>
+              <h1> Phantomhive  Store</h1>
               <div className="user-section">
                 <span>✨ Hola, <strong>{user?.username}</strong></span>
                 <button className="cart-button" onClick={() => setCarritoAbierto(!carritoAbierto)}>
