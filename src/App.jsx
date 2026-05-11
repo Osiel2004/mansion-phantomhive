@@ -35,7 +35,7 @@ function App() {
       {({ signOut, user }) => (
         <div className="mansion-container">
           <header>
-            <h1>Mansión Phantomhive - Catálogo Oficial</h1>
+            <h1>Phantomhive - Catálogo Oficial</h1>
             
             <div style={{ marginTop: '10px', color: '#d4af37' }}>
               <span>Bienvenido, <strong>{user?.username}</strong> </span>
