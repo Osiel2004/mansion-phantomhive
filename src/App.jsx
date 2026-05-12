@@ -90,7 +90,7 @@ function App() {
   const categorias = ['todas', ...new Set(productos.map(p => p.categoria))];
 
   return (
-    <Authenticator>
+    <Authenticator loginMechanisms={['email']}>
       {({ signOut, user }) => (
         <div className="app-container">
           {/* Notificación Toast */}
