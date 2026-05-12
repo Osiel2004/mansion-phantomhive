@@ -1,17 +1,26 @@
-/* App.css - Estilo Gótico Victoriano para Phantomhive Store */
+/* App.css - Estilo con paleta Baby Barn Owl & Burnt Crimson */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-    --black: #0a0a0a;
-    --blood: #5e0a0a;
-    --wine: #3a0000;
+    /* Paleta de colores principal */
+    --baby-barn-owl: #C4C1B8;
+    --intrigue: #635851;
+    --burnt-crimson: #551F22;
+    --seal-brown: #301415;
+    --nuln-oil: #130F0D;
+    
+    /* Variables derivadas para el diseño */
+    --bg-primary: var(--nuln-oil);
+    --bg-secondary: var(--seal-brown);
+    --text-primary: var(--baby-barn-owl);
+    --text-secondary: var(--intrigue);
+    --accent-primary: var(--burnt-crimson);
+    --accent-secondary: var(--baby-barn-owl);
+    --border-color: rgba(196, 193, 184, 0.15);
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-heavy: rgba(0, 0, 0, 0.5);
     --gold: #c5a880;
-    --ivory: #f5f0e6;
-    --silver: #c0c0c0;
-    --dark-red: #8b1a1a;
-    --shadow-dark: rgba(0, 0, 0, 0.8);
-    --shadow-gold: rgba(197, 168, 128, 0.3);
 }
 
 * {
@@ -21,16 +30,13 @@
 }
 
 body {
-    font-family: 'EB Garamond', serif;
-    background-color: var(--black);
-    color: var(--ivory);
+    font-family: 'Cormorant Garamond', serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     margin: 0;
     padding: 0;
     line-height: 1.6;
-    background-image: url('https://i.pinimg.com/originals/2e/4b/6e/2e4b6e5e5e5e5e5e5e5e5e5e5e5e5e5.jpg');
-    background-attachment: fixed;
-    background-size: cover;
-    background-blend-mode: overlay;
+    background-image: radial-gradient(circle at 10% 20%, rgba(85, 31, 34, 0.03) 0%, transparent 50%);
     min-height: 100vh;
 }
 
@@ -38,7 +44,7 @@ body {
 .app-container {
     position: relative;
     min-height: 100vh;
-    background: rgba(10, 10, 10, 0.85);
+    background: linear-gradient(135deg, rgba(19, 15, 13, 0.95) 0%, rgba(48, 20, 21, 0.92) 100%);
 }
 
 /* ========== TOAST NOTIFICATION ========== */
@@ -47,47 +53,48 @@ body {
     top: 20px;
     right: 20px;
     padding: 12px 24px;
-    background: var(--wine);
-    border-left: 4px solid var(--gold);
-    color: var(--ivory);
-    font-family: 'Cinzel', serif;
+    background: var(--accent-primary);
+    border-left: 4px solid var(--baby-barn-owl);
+    color: var(--text-primary);
+    font-family: 'Playfair Display', serif;
     font-size: 0.9rem;
     z-index: 1000;
-    animation: slideIn 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
+    animation: slideIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 20px var(--shadow);
+    backdrop-filter: blur(10px);
+    font-weight: 500;
 }
 
 .toast-notification.exito {
-    border-left-color: var(--gold);
-    background: rgba(58, 0, 0, 0.95);
+    border-left-color: var(--baby-barn-owl);
+    background: rgba(85, 31, 34, 0.95);
 }
 
 .toast-notification.info {
-    border-left-color: var(--silver);
-    background: rgba(10, 10, 10, 0.95);
+    border-left-color: var(--intrigue);
+    background: rgba(99, 88, 81, 0.95);
 }
 
 @keyframes slideIn {
     from {
-        transform: translateX(100%);
+        transform: translateX(100%) rotate(-5deg);
         opacity: 0;
     }
     to {
-        transform: translateX(0);
+        transform: translateX(0) rotate(0);
         opacity: 1;
     }
 }
 
 /* ========== HEADER ========== */
 .main-header {
-    background: rgba(10, 10, 10, 0.95);
-    border-bottom: 2px solid var(--gold);
+    background: rgba(19, 15, 13, 0.98);
+    border-bottom: 1px solid var(--border-color);
     padding: 20px 0;
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
 }
 
 .header-content {
@@ -102,27 +109,30 @@ body {
 }
 
 .main-header h1 {
-    font-family: 'Cinzel', serif;
+    font-family: 'Playfair Display', serif;
     font-size: 2rem;
-    color: var(--ivory);
-    text-shadow: 2px 2px 4px var(--shadow-dark);
-    letter-spacing: 2px;
+    color: var(--text-primary);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
     position: relative;
     display: inline-block;
+    font-weight: 600;
 }
 
 .main-header h1::before {
-    content: '✧';
-    color: var(--gold);
-    margin-right: 10px;
+    content: '✦';
+    color: var(--baby-barn-owl);
+    margin-right: 12px;
     font-size: 1.5rem;
+    opacity: 0.8;
 }
 
 .main-header h1::after {
-    content: '✧';
-    color: var(--gold);
-    margin-left: 10px;
+    content: '✦';
+    color: var(--baby-barn-owl);
+    margin-left: 12px;
     font-size: 1.5rem;
+    opacity: 0.8;
 }
 
 .user-section {
@@ -133,32 +143,51 @@ body {
 }
 
 .user-section span {
-    font-family: 'EB Garamond', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-size: 1rem;
-    color: var(--ivory);
+    color: var(--text-primary);
+    font-weight: 500;
 }
 
 .user-section strong {
-    color: var(--gold);
-    font-family: 'Cinzel', serif;
+    color: var(--baby-barn-owl);
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
 }
 
 .cart-button, .logout-button {
     padding: 8px 20px;
     background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--ivory);
-    font-family: 'Cinzel', serif;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: 'Playfair Display', serif;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
     letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cart-button::before, .logout-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(85, 31, 34, 0.3), transparent);
+    transition: 0.5s;
+}
+
+.cart-button:hover::before, .logout-button:hover::before {
+    left: 100%;
 }
 
 .cart-button:hover, .logout-button:hover {
-    background: rgba(94, 10, 10, 0.5);
+    background: rgba(85, 31, 34, 0.3);
+    border-color: var(--baby-barn-owl);
     letter-spacing: 2px;
-    border-color: var(--gold);
 }
 
 /* ========== MAIN LAYOUT ========== */
@@ -174,24 +203,27 @@ body {
 
 /* ========== FILTERS SIDEBAR ========== */
 .filters-sidebar {
-    width: 250px;
-    background: rgba(10, 10, 10, 0.8);
-    border: 1px solid var(--gold);
+    width: 260px;
+    background: rgba(48, 20, 21, 0.7);
+    border: 1px solid var(--border-color);
     padding: 25px 20px;
     height: fit-content;
     position: sticky;
     top: 100px;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
+    border-radius: 2px;
 }
 
 .filters-sidebar h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.3rem;
-    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--baby-barn-owl);
     margin-bottom: 20px;
     text-align: center;
     position: relative;
-    padding-bottom: 10px;
+    padding-bottom: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .filters-sidebar h3::after {
@@ -200,9 +232,10 @@ body {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;
+    width: 50px;
     height: 1px;
-    background: var(--gold);
+    background: var(--baby-barn-owl);
+    opacity: 0.5;
 }
 
 .filter-button {
@@ -211,26 +244,28 @@ body {
     padding: 10px;
     margin: 8px 0;
     background: transparent;
-    border: 1px solid rgba(197, 168, 128, 0.3);
-    color: var(--ivory);
-    font-family: 'EB Garamond', serif;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: capitalize;
+    font-weight: 500;
+    border-radius: 2px;
 }
 
 .filter-button:hover {
-    border-color: var(--gold);
-    background: rgba(94, 10, 10, 0.3);
+    border-color: var(--baby-barn-owl);
+    background: rgba(85, 31, 34, 0.3);
     padding-left: 15px;
 }
 
 .filter-button.active {
-    border-color: var(--gold);
-    background: rgba(94, 10, 10, 0.5);
-    color: var(--gold);
-    font-family: 'Cinzel', serif;
+    border-color: var(--baby-barn-owl);
+    background: var(--accent-primary);
+    color: var(--text-primary);
+    font-family: 'Playfair Display', serif;
     letter-spacing: 1px;
 }
 
@@ -240,25 +275,27 @@ body {
 }
 
 .catalogo h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 2rem;
-    color: var(--gold);
-    margin-bottom: 30px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--baby-barn-owl);
+    margin-bottom: 35px;
     text-align: center;
     position: relative;
     display: inline-block;
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
+    font-weight: 500;
+    letter-spacing: 2px;
 }
 
 .catalogo h2::before,
 .catalogo h2::after {
-    content: '✦';
-    color: var(--gold);
+    content: '⚜️';
+    color: var(--baby-barn-owl);
     margin: 0 15px;
-    font-size: 1.2rem;
-    opacity: 0.7;
+    font-size: 1rem;
+    opacity: 0.6;
 }
 
 .productos-grid {
@@ -268,12 +305,13 @@ body {
 }
 
 .tarjeta-producto {
-    background: rgba(10, 10, 10, 0.85);
-    border: 1px solid var(--gold);
-    transition: all 0.4s ease;
+    background: rgba(48, 20, 21, 0.6);
+    border: 1px solid var(--border-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(5px);
+    border-radius: 2px;
 }
 
 .tarjeta-producto::before {
@@ -282,78 +320,82 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(94, 10, 10, 0.1) 0%, transparent 100%);
-    pointer-events: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--baby-barn-owl), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.tarjeta-producto:hover::before {
+    transform: translateX(100%);
 }
 
 .tarjeta-producto:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-    border-color: var(--gold);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-heavy);
+    border-color: rgba(196, 193, 184, 0.3);
 }
 
 .product-image-placeholder {
     width: 100%;
-    height: 250px;
-    background: linear-gradient(135deg, var(--wine), var(--black));
+    height: 260px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--seal-brown));
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 3rem;
-    border-bottom: 1px solid var(--gold);
+    border-bottom: 1px solid var(--border-color);
     position: relative;
+    transition: all 0.3s ease;
 }
 
-.product-image-placeholder::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+.tarjeta-producto:hover .product-image-placeholder {
+    background: linear-gradient(135deg, var(--burnt-crimson), var(--nuln-oil));
 }
 
 .tarjeta-producto h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    margin: 15px 20px 10px;
-    color: var(--ivory);
+    font-size: 1.2rem;
+    margin: 18px 20px 8px;
+    color: var(--text-primary);
     position: relative;
     display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .tarjeta-producto h3::after {
     content: '';
     position: absolute;
-    bottom: -5px;
+    bottom: -6px;
     left: 0;
-    width: 40px;
+    width: 35px;
     height: 1px;
-    background: var(--gold);
+    background: var(--baby-barn-owl);
+    opacity: 0.6;
 }
 
 .precio {
-    font-size: 1.5rem;
-    color: var(--gold);
-    margin: 10px 20px;
-    font-family: 'Cinzel', serif;
-    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--baby-barn-owl);
+    margin: 12px 20px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
 }
 
 .precio::before {
-    content: '₿';
-    margin-right: 5px;
+    content: '$';
+    margin-right: 4px;
     font-size: 1rem;
     opacity: 0.8;
 }
 
 .stock {
     font-size: 0.85rem;
-    margin: 10px 20px;
-    color: var(--silver);
+    margin: 8px 20px;
+    color: var(--intrigue);
     font-style: italic;
+    font-weight: 500;
 }
 
 .tarjeta-producto button {
@@ -362,24 +404,26 @@ body {
     margin: 15px 20px 20px;
     padding: 10px;
     background: transparent;
-    color: var(--ivory);
-    border: 1px solid var(--gold);
-    font-family: 'Cinzel', serif;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    font-family: 'Playfair Display', serif;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
     letter-spacing: 1px;
+    border-radius: 2px;
 }
 
 .tarjeta-producto button:hover:not(:disabled) {
-    background: rgba(94, 10, 10, 0.5);
+    background: rgba(85, 31, 34, 0.5);
+    border-color: var(--baby-barn-owl);
     letter-spacing: 2px;
 }
 
 .tarjeta-producto button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    border-color: var(--silver);
+    border-color: var(--intrigue);
 }
 
 /* ========== CART SIDEBAR ========== */
@@ -389,13 +433,13 @@ body {
     right: -450px;
     width: 450px;
     height: 100vh;
-    background: rgba(10, 10, 10, 0.98);
-    border-left: 2px solid var(--gold);
+    background: rgba(19, 15, 13, 0.98);
+    border-left: 1px solid var(--border-color);
     z-index: 1000;
-    transition: right 0.3s ease;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
 }
 
 .cart-sidebar.open {
@@ -407,35 +451,38 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 25px;
-    border-bottom: 1px solid var(--gold);
-    background: rgba(58, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(85, 31, 34, 0.2);
 }
 
 .cart-header h2 {
-    font-family: 'Cinzel', serif;
-    color: var(--gold);
-    font-size: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    color: var(--baby-barn-owl);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .close-cart {
     background: none;
     border: none;
-    color: var(--ivory);
+    color: var(--text-primary);
     font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .close-cart:hover {
-    color: var(--gold);
+    color: var(--baby-barn-owl);
     transform: rotate(90deg);
 }
 
 .empty-cart {
     text-align: center;
-    padding: 50px;
-    color: var(--silver);
+    padding: 60px;
+    color: var(--intrigue);
     font-style: italic;
+    font-size: 1.1rem;
 }
 
 .cart-items {
@@ -445,7 +492,7 @@ body {
 }
 
 .cart-item {
-    border-bottom: 1px solid rgba(197, 168, 128, 0.3);
+    border-bottom: 1px solid var(--border-color);
     padding: 15px 0;
     margin-bottom: 10px;
 }
@@ -454,40 +501,43 @@ body {
     font-family: 'Playfair Display', serif;
     font-size: 1rem;
     margin-bottom: 5px;
-    color: var(--ivory);
+    color: var(--text-primary);
+    font-weight: 500;
 }
 
 .cart-item-info p {
-    color: var(--gold);
-    font-size: 0.9rem;
+    color: var(--baby-barn-owl);
+    font-size: 0.85rem;
 }
 
 .cart-item-controls {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 10px 0;
+    gap: 12px;
+    margin: 12px 0;
 }
 
 .cart-item-controls button {
     width: 30px;
     height: 30px;
     background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--ivory);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1rem;
+    border-radius: 2px;
 }
 
 .cart-item-controls button:hover {
-    background: rgba(94, 10, 10, 0.5);
+    background: rgba(85, 31, 34, 0.5);
+    border-color: var(--baby-barn-owl);
 }
 
 .cart-item-controls span {
     min-width: 30px;
     text-align: center;
-    font-family: 'Cinzel', serif;
+    font-family: 'Playfair Display', serif;
 }
 
 .remove-item {
@@ -497,49 +547,53 @@ body {
 }
 
 .remove-item:hover {
-    color: var(--gold);
+    color: var(--baby-barn-owl);
     transform: rotate(90deg);
+    background: none !important;
 }
 
 .item-subtotal {
     text-align: right;
-    color: var(--gold);
-    font-size: 0.9rem;
+    color: var(--baby-barn-owl);
+    font-size: 0.85rem;
     margin-top: 5px;
+    font-family: 'Playfair Display', serif;
 }
 
 .cart-footer {
     padding: 20px;
-    border-top: 1px solid var(--gold);
-    background: rgba(58, 0, 0, 0.3);
+    border-top: 1px solid var(--border-color);
+    background: rgba(85, 31, 34, 0.15);
 }
 
 .cart-total {
     display: flex;
     justify-content: space-between;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     margin-bottom: 20px;
     padding: 10px 0;
-    font-family: 'Cinzel', serif;
-    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    color: var(--baby-barn-owl);
+    font-weight: 600;
 }
 
 .checkout-button {
     width: 100%;
-    padding: 15px;
-    background: var(--wine);
-    color: var(--ivory);
-    border: 1px solid var(--gold);
-    font-family: 'Cinzel', serif;
-    font-size: 1rem;
+    padding: 14px;
+    background: var(--accent-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s ease;
     letter-spacing: 2px;
+    border-radius: 2px;
 }
 
 .checkout-button:hover {
-    background: var(--gold);
-    color: var(--black);
+    background: var(--baby-barn-owl);
+    color: var(--bg-primary);
     letter-spacing: 3px;
 }
 
@@ -550,9 +604,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.8);
     z-index: 999;
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(4px);
 }
 
 /* ========== RESPONSIVE ========== */
@@ -601,6 +655,11 @@ body {
         font-size: 1.5rem;
     }
     
+    .main-header h1::before,
+    .main-header h1::after {
+        display: none;
+    }
+    
     .user-section {
         justify-content: center;
     }
@@ -612,18 +671,41 @@ body {
 
 /* ========== SCROLLBAR ========== */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--black);
+    background: var(--seal-brown);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--gold);
-    border-radius: 4px;
+    background: var(--baby-barn-owl);
+    border-radius: 3px;
+    opacity: 0.5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--blood);
+    background: var(--burnt-crimson);
 }
+
+/* ========== ANIMACIONES ADICIONALES ========== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tarjeta-producto {
+    animation: fadeIn 0.5s ease backwards;
+}
+
+.tarjeta-producto:nth-child(1) { animation-delay: 0.05s; }
+.tarjeta-producto:nth-child(2) { animation-delay: 0.1s; }
+.tarjeta-producto:nth-child(3) { animation-delay: 0.15s; }
+.tarjeta-producto:nth-child(4) { animation-delay: 0.2s; }
+.tarjeta-producto:nth-child(5) { animation-delay: 0.25s; }
