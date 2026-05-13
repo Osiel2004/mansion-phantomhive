@@ -14,33 +14,79 @@ Amplify.configure({
   }
 });
 
-// Productos de ROPA (coherentes con tu tienda)
+// Productos - Colección "Among Ravens & Crimson Roses"
 const productosIniciales = [
-  { id: 1, nombre: 'Camisa de Lino Premium', precio: 59.99, categoria: 'Camisas', stock: 15, imagen: '/images/camisa-lino.jpg' },
-  { id: 2, nombre: 'Pantalón Chino Elástico', precio: 79.99, categoria: 'Pantalones', stock: 10, imagen: '/images/pantalon-chino.jpg' },
-  { id: 3, nombre: 'Chaqueta de Cuero Vegano', precio: 149.99, categoria: 'Chaquetas', stock: 5, imagen: '/images/chaqueta-cuero.jpg' },
-  { id: 4, nombre: 'Vestido Floral Veraniego', precio: 89.99, categoria: 'Vestidos', stock: 8, imagen: '/images/vestido-floral.jpg' },
-  { id: 5, nombre: 'Zapatos Casual Oxford', precio: 119.99, categoria: 'Calzado', stock: 12, imagen: '/images/zapatos-oxford.jpg' }
+  { 
+    id: 1, 
+    nombre: 'Cojín de Terciopelo Mira', 
+    precio: 89.99, 
+    categoria: 'Hogar', 
+    stock: 12, 
+    imagen: '/images/cojin-terciopelo.jpg',
+    descripcion: 'Terciopelo burdeos con bordados en hilo dorado'
+  },
+  { 
+    id: 2, 
+    nombre: 'Anillo de Plata Ascua', 
+    precio: 149.99, 
+    categoria: 'Joyas', 
+    stock: 8, 
+    imagen: '/images/anillo-plata.jpg',
+    descripcion: 'Plara esterlina con rubí sintético talla princesa'
+  },
+  { 
+    id: 3, 
+    nombre: 'Set de Escritorio de Piel Atelier', 
+    precio: 299.99, 
+    categoria: 'Accesorios', 
+    stock: 5, 
+    imagen: '/images/set-escritorio.jpg',
+    descripcion: 'Piel genuina negra con herrajes dorados'
+  },
+  { 
+    id: 4, 
+    nombre: 'Vestido Raven Noir', 
+    precio: 249.99, 
+    categoria: 'Vestidos', 
+    stock: 7, 
+    imagen: '/images/vestido-raven.jpg',
+    descripcion: 'Gasa de seda negra con detalles de encaje'
+  },
+  { 
+    id: 5, 
+    nombre: 'Collar Perla Negra', 
+    precio: 189.99, 
+    categoria: 'Joyas', 
+    stock: 10, 
+    imagen: '/images/collar-perla.jpg',
+    descripcion: 'Perlas negras de agua dulce con cierre de plata'
+  },
+  { 
+    id: 6, 
+    nombre: 'Velas Aromáticas Crimson', 
+    precio: 45.99, 
+    categoria: 'Hogar', 
+    stock: 20, 
+    imagen: '/images/velas-crimson.jpg',
+    descripcion: 'Set de 3 velas con aroma a rosas y sándalo'
+  }
 ];
 
 function App() {
   const [carrito, setCarrito] = useState(() => {
-    // Persistir carrito en localStorage
     const savedCart = localStorage.getItem('carrito');
     return savedCart ? JSON.parse(savedCart) : [];
   });
   
-  const [productos, setProductos] = useState(productosIniciales);
-  const [filtroCategoria, setFiltroCategoria] = useState('todas');
+  const [productos] = useState(productosIniciales);
+  const [categoriaActiva, setCategoriaActiva] = useState('todas');
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [notificacion, setNotificacion] = useState(null);
 
-  // Guardar carrito en localStorage
   useEffect(() => {
     localStorage.setItem('carrito', JSON.stringify(carrito));
   }, [carrito]);
 
-  // Mostrar notificación temporal
   const mostrarNotificacion = (mensaje, tipo = 'exito') => {
     setNotificacion({ mensaje, tipo });
     setTimeout(() => setNotificacion(null), 3000);
@@ -83,14 +129,14 @@ function App() {
   const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
   const totalPrecio = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
-  const productosFiltrados = filtroCategoria === 'todas'
+  const productosFiltrados = categoriaActiva === 'todas'
     ? productos
-    : productos.filter(p => p.categoria === filtroCategoria);
+    : productos.filter(p => p.categoria === categoriaActiva);
 
   const categorias = ['todas', ...new Set(productos.map(p => p.categoria))];
 
   return (
-    <Authenticator loginMechanisms={['email']}>
+    <Authenticator>
       {({ signOut, user }) => (
         <div className="app-container">
           {/* Notificación Toast */}
@@ -100,112 +146,164 @@ function App() {
             </div>
           )}
 
-          {/* Header con navegación */}
+          {/* Header - Estilo Crimson Raven */}
           <header className="main-header">
             <div className="header-content">
-              <h1> Phantomhive  Store</h1>
+              <div className="logo-section">
+                <div className="logo">
+                  <img src="/images/raven-logo.png" alt="Crimson Raven" />
+                </div>
+                <div className="logo-text">
+                  <h1>CRIMSON RAVEN</h1>
+                  <p>Atelier & Co.</p>
+                </div>
+              </div>
+              
+              <nav className="main-nav">
+                <a href="#">INICIO</a>
+                <a href="#">COLECCIÓN</a>
+                <a href="#">ATELIER</a>
+                <a href="#">CONTACTO</a>
+              </nav>
+
               <div className="user-section">
-                <span>✨ Hola, <strong>{user?.username}</strong></span>
+                <span>⚜️ Hola, <strong>{user?.username}</strong></span>
                 <button className="cart-button" onClick={() => setCarritoAbierto(!carritoAbierto)}>
-                  🛒 Carrito ({totalItems})
+                  🛒 ({totalItems})
                 </button>
                 <button className="logout-button" onClick={signOut}>
-                  🚪 Cerrar Sesión
+                  ✦ SALIR
                 </button>
               </div>
             </div>
           </header>
 
-          <div className="main-layout">
-            {/* Sidebar con filtros */}
-            <aside className="filters-sidebar">
-              <h3>Filtrar por categoría</h3>
+          {/* Hero Section - "Among Ravens & Crimson Roses" */}
+          <section className="hero">
+            <div className="hero-content">
+              <h2>AMONG RAVENS &<br />CRIMSON ROSES</h2>
+              <div className="divider"></div>
+              <p>
+                Descubre una colección exclusiva inspirada en la elegancia victoriana, 
+                la oscuridad romántica y el lujo atemporal.
+              </p>
+              <button onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })}>
+                EXPLORAR COLECCIÓN
+              </button>
+            </div>
+          </section>
+
+          {/* Catálogo de productos */}
+          <section id="catalog" className="catalog-section">
+            <div className="section-title">
+              <h3>LA COLECCIÓN</h3>
+              <div className="section-line"></div>
+            </div>
+
+            {/* Filtros simplificados - estilo elegante */}
+            <div className="filters-wrapper">
               {categorias.map(cat => (
                 <button
                   key={cat}
-                  className={`filter-button ${filtroCategoria === cat ? 'active' : ''}`}
-                  onClick={() => setFiltroCategoria(cat)}
+                  className={`filter-chip ${categoriaActiva === cat ? 'active' : ''}`}
+                  onClick={() => setCategoriaActiva(cat)}
                 >
-                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  {cat === 'todas' ? 'TODAS' : cat.toUpperCase()}
                 </button>
               ))}
-            </aside>
+            </div>
 
-            {/* Catálogo de productos */}
-            <main className="catalogo">
-              <h2>Nuestra Colección {filtroCategoria !== 'todas' && `- ${filtroCategoria}`}</h2>
-              <div className="productos-grid">
-                {productosFiltrados.map((prod) => (
-                  <div key={prod.id} className="tarjeta-producto">
-                    <div className="product-image-placeholder">
-                      🏷️ {prod.categoria}
-                    </div>
-                    <h3>{prod.nombre}</h3>
-                    <p className="precio">${prod.precio.toFixed(2)} USD</p>
-                    <p className="stock">📦 Stock: {prod.stock} unidades</p>
+            {/* Grid de productos */}
+            <div className="products-grid">
+              {productosFiltrados.map((prod) => (
+                <div key={prod.id} className="product-card">
+                  <div className="product-image">
+                    <img 
+                      src={prod.imagen} 
+                      alt={prod.nombre}
+                      onError={(e) => {
+                        e.target.src = 'https://placehold.co/600x800/3b0614/d6b17a?text=CRIMSON+RAVEN';
+                      }}
+                    />
+                  </div>
+                  <div className="product-content">
+                    <h4>{prod.nombre}</h4>
+                    <div className="card-divider"></div>
+                    <p className="price">${prod.precio.toFixed(2)}</p>
                     <button 
                       onClick={() => agregarAlCarrito(prod)}
                       disabled={prod.stock === 0}
                     >
-                      {prod.stock > 0 ? '➕ Añadir al Carrito' : '❌ Agotado'}
+                      {prod.stock > 0 ? 'AÑADIR AL CARRO' : 'AGOTADO'}
                     </button>
                   </div>
-                ))}
-              </div>
-            </main>
-
-            {/* Carrito lateral deslizable */}
-            <div className={`cart-sidebar ${carritoAbierto ? 'open' : ''}`}>
-              <div className="cart-header">
-                <h2>🛍️ Tu Carrito</h2>
-                <button className="close-cart" onClick={() => setCarritoAbierto(false)}>✖</button>
-              </div>
-              
-              {carrito.length === 0 ? (
-                <p className="empty-cart">Tu carrito está vacío</p>
-              ) : (
-                <>
-                  <div className="cart-items">
-                    {carrito.map((item) => (
-                      <div key={item.id} className="cart-item">
-                        <div className="cart-item-info">
-                          <h4>{item.nombre}</h4>
-                          <p>${item.precio.toFixed(2)} c/u</p>
-                        </div>
-                        <div className="cart-item-controls">
-                          <button onClick={() => actualizarCantidad(item.id, item.cantidad - 1)}>
-                            -
-                          </button>
-                          <span>{item.cantidad}</span>
-                          <button onClick={() => actualizarCantidad(item.id, item.cantidad + 1)}>
-                            +
-                          </button>
-                          <button 
-                            className="remove-item"
-                            onClick={() => eliminarDelCarrito(item.id)}
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                        <p className="item-subtotal">
-                          Subtotal: ${(item.precio * item.cantidad).toFixed(2)}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="cart-footer">
-                    <div className="cart-total">
-                      <strong>Total:</strong>
-                      <strong>${totalPrecio.toFixed(2)} USD</strong>
-                    </div>
-                    <button className="checkout-button" onClick={() => alert('Próximamente: Integración con Stripe')}>
-                      Proceder al Pago 💳
-                    </button>
-                  </div>
-                </>
-              )}
+                </div>
+              ))}
             </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="main-footer">
+            <p>© 2024 CRIMSON RAVEN — Atelier de Oscuridad Romántica</p>
+            <div className="socials">
+              <a href="#">IG</a>
+              <a href="#">FB</a>
+              <a href="#">X</a>
+              <a href="#">YT</a>
+            </div>
+          </footer>
+
+          {/* Carrito lateral deslizable */}
+          <div className={`cart-sidebar ${carritoAbierto ? 'open' : ''}`}>
+            <div className="cart-header">
+              <h2>✦ TU CARRO ✦</h2>
+              <button className="close-cart" onClick={() => setCarritoAbierto(false)}>✖</button>
+            </div>
+            
+            {carrito.length === 0 ? (
+              <p className="empty-cart">Tu carro está vacío</p>
+            ) : (
+              <>
+                <div className="cart-items">
+                  {carrito.map((item) => (
+                    <div key={item.id} className="cart-item">
+                      <div className="cart-item-info">
+                        <h4>{item.nombre}</h4>
+                        <p>${item.precio.toFixed(2)} c/u</p>
+                      </div>
+                      <div className="cart-item-controls">
+                        <button onClick={() => actualizarCantidad(item.id, item.cantidad - 1)}>
+                          -
+                        </button>
+                        <span>{item.cantidad}</span>
+                        <button onClick={() => actualizarCantidad(item.id, item.cantidad + 1)}>
+                          +
+                        </button>
+                        <button 
+                          className="remove-item"
+                          onClick={() => eliminarDelCarrito(item.id)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                      <p className="item-subtotal">
+                        Subtotal: ${(item.precio * item.cantidad).toFixed(2)}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="cart-footer">
+                  <div className="cart-total">
+                    <strong>TOTAL:</strong>
+                    <strong>${totalPrecio.toFixed(2)}</strong>
+                  </div>
+                  <button className="checkout-button" onClick={() => alert('Próximamente: Integración con Stripe')}>
+                    PROCEDER AL PAGO
+                  </button>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Overlay para cerrar carrito */}
