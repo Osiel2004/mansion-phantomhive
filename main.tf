@@ -127,3 +127,129 @@ output "cognito_user_pool_id" {
 output "cognito_client_id" {
   value = aws_cognito_user_pool_client.app_client.id
 }
+
+# ==========================================
+# NUEVOS RECURSOS: BACKEND (LAMBDA + API GATEWAY)
+# ==========================================
+
+# 1. Comprimir el código de Node.js en un .zip automáticamente
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/backend"
+  output_path = "${path.module}/backend.zip"
+}
+
+# 2. Rol de IAM: Le da a la Lambda una "identidad" en AWS
+resource "aws_iam_role" "lambda_role" {
+  name = "phantomhive_lambda_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "lambda.amazonaws.com"
+      }
+    }]
+  })
+}
+
+# 3. Políticas: Permiso para tocar nuestra tabla DynamoDB y escribir logs
+resource "aws_iam_policy" "lambda_dynamodb_policy" {
+  name        = "phantomhive_lambda_dynamodb_policy"
+  description = "Permisos para que Lambda acceda a DynamoDB"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:Scan",
+          "dynamodb:GetItem"
+        ]
+        Resource = aws_dynamodb_table.catalogo_productos.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
+      }
+    ]
+  })
+}
+
+# Unimos la política al rol
+resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
+}
+
+# 4. La Función Lambda
+resource "aws_lambda_function" "catalogo_api" {
+  filename         = data.archive_file.lambda_zip.output_path
+  function_name    = "phantomhive_catalogo_api"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "index.handler"
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  runtime          = "nodejs18.x" # Entorno de Node.js
+}
+
+# 5. API Gateway: La URL pública que conectará React con Lambda
+resource "aws_apigatewayv2_api" "http_api" {
+  name          = "phantomhive-api"
+  protocol_type = "HTTP"
+  
+  # Configuración CORS indispensable para que React pueda leer la API
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["GET", "POST", "OPTIONS"]
+    allow_headers = ["content-type"]
+  }
+}
+
+resource "aws_apigatewayv2_stage" "api_stage" {
+  api_id      = aws_apigatewayv2_api.http_api.id
+  name        = "$default"
+  auto_deploy = true
+}
+
+resource "aws_apigatewayv2_integration" "lambda_integration" {
+  api_id           = aws_apigatewayv2_api.http_api.id
+  integration_type = "AWS_PROXY"
+  integration_uri  = aws_lambda_function.catalogo_api.invoke_arn
+  integration_method = "POST"
+}
+
+# Rutas de nuestra API (/productos)
+resource "aws_apigatewayv2_route" "get_productos" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "GET /productos"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "post_productos" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "POST /productos"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+# 6. Permiso de seguridad para que API Gateway pueda "despertar" a la Lambda
+resource "aws_lambda_permission" "api_gw" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.catalogo_api.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
+}
+
+# 7. Salida: Terraform nos dará la URL mágica
+output "api_url" {
+  value = aws_apigatewayv2_stage.api_stage.invoke_url
+}

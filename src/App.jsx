@@ -14,63 +14,8 @@ Amplify.configure({
   }
 });
 
-// Productos - Colección "Among Ravens & Crimson Roses"
-const productosIniciales = [
-  { 
-    id: 1, 
-    nombre: 'Cojín de Terciopelo Mira', 
-    precio: 89.99, 
-    categoria: 'Hogar', 
-    stock: 12, 
-    imagen: '/images/cojin-terciopelo.jpg',
-    descripcion: 'Terciopelo burdeos con bordados en hilo dorado'
-  },
-  { 
-    id: 2, 
-    nombre: 'Anillo de Plata Ascua', 
-    precio: 149.99, 
-    categoria: 'Joyas', 
-    stock: 8, 
-    imagen: '/images/anillo-plata.jpg',
-    descripcion: 'Plara esterlina con rubí sintético talla princesa'
-  },
-  { 
-    id: 3, 
-    nombre: 'Set de Escritorio de Piel Atelier', 
-    precio: 299.99, 
-    categoria: 'Accesorios', 
-    stock: 5, 
-    imagen: '/images/set-escritorio.jpg',
-    descripcion: 'Piel genuina negra con herrajes dorados'
-  },
-  { 
-    id: 4, 
-    nombre: 'Vestido Raven Noir', 
-    precio: 249.99, 
-    categoria: 'Vestidos', 
-    stock: 7, 
-    imagen: '/images/vestido-raven.jpg',
-    descripcion: 'Gasa de seda negra con detalles de encaje'
-  },
-  { 
-    id: 5, 
-    nombre: 'Collar Perla Negra', 
-    precio: 189.99, 
-    categoria: 'Joyas', 
-    stock: 10, 
-    imagen: '/images/collar-perla.jpg',
-    descripcion: 'Perlas negras de agua dulce con cierre de plata'
-  },
-  { 
-    id: 6, 
-    nombre: 'Velas Aromáticas Crimson', 
-    precio: 45.99, 
-    categoria: 'Hogar', 
-    stock: 20, 
-    imagen: '/images/velas-crimson.jpg',
-    descripcion: 'Set de 3 velas con aroma a rosas y sándalo'
-  }
-];
+// LA RUTA HACIA TU BACKEND (Asegúrate de pegar tu URL real aquí)
+const API_URL = "https://d319e7lqvk.execute-api.us-east-1.amazonaws.com/productos";
 
 function App() {
   const [carrito, setCarrito] = useState(() => {
@@ -78,10 +23,34 @@ function App() {
     return savedCart ? JSON.parse(savedCart) : [];
   });
   
-  const [productos] = useState(productosIniciales);
+  // Estados para la conexión con la base de datos
+  const [productos, setProductos] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [modoAdmin, setModoAdmin] = useState(false);
+
   const [categoriaActiva, setCategoriaActiva] = useState('todas');
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [notificacion, setNotificacion] = useState(null);
+
+  // 1. Función para descargar el catálogo desde DynamoDB
+  const cargarProductos = async () => {
+    setCargando(true);
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setProductos(data || []);
+    } catch (error) {
+      console.error("Error al cargar la colección:", error);
+      mostrarNotificacion("Error al conectar con el Atelier", "error");
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  // Se ejecuta al cargar la página
+  useEffect(() => {
+    cargarProductos();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -101,16 +70,16 @@ function App() {
           ? { ...item, cantidad: item.cantidad + 1 }
           : item
       ));
-      mostrarNotificacion(`+1 ${producto.nombre} añadido al carrito`);
+      mostrarNotificacion(`+1 ${producto.nombre} al carro`);
     } else {
       setCarrito([...carrito, { ...producto, cantidad: 1 }]);
-      mostrarNotificacion(`${producto.nombre} añadido al carrito`);
+      mostrarNotificacion(`${producto.nombre} añadido`);
     }
   };
 
   const eliminarDelCarrito = (productoId) => {
     setCarrito(carrito.filter(item => item.id !== productoId));
-    mostrarNotificacion('Producto eliminado del carrito', 'info');
+    mostrarNotificacion('Artículo retirado', 'info');
   };
 
   const actualizarCantidad = (productoId, nuevaCantidad) => {
@@ -118,12 +87,40 @@ function App() {
       eliminarDelCarrito(productoId);
       return;
     }
-    
     setCarrito(carrito.map(item =>
-      item.id === productoId
-        ? { ...item, cantidad: nuevaCantidad }
-        : item
+      item.id === productoId ? { ...item, cantidad: nuevaCantidad } : item
     ));
+  };
+
+  // 2. Función para subir nuevos productos desde el panel
+  const guardarNuevoProducto = async (e) => {
+    e.preventDefault();
+    
+    const nuevoProducto = {
+      id: Date.now().toString(),
+      nombre: e.target.nombre.value,
+      precio: parseFloat(e.target.precio.value),
+      categoria: e.target.categoria.value,
+      stock: parseInt(e.target.stock.value),
+      imagen: e.target.imagen.value || '/images/default-item.jpg',
+      descripcion: e.target.descripcion.value
+    };
+
+    try {
+      mostrarNotificacion("Forjando artículo en la nube...", "info");
+      await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify(nuevoProducto)
+      });
+      
+      mostrarNotificacion("¡Pieza agregada a la colección!");
+      e.target.reset(); 
+      cargarProductos(); 
+      setModoAdmin(false);
+    } catch (error) {
+      console.error("Error:", error);
+      mostrarNotificacion("El ritual de guardado falló", "error");
+    }
   };
 
   const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
@@ -136,17 +133,16 @@ function App() {
   const categorias = ['todas', ...new Set(productos.map(p => p.categoria))];
 
   return (
-    <Authenticator>
+    // ¡El loginMechanisms es vital para Cognito!
+    <Authenticator loginMechanisms={['email']}>
       {({ signOut, user }) => (
         <div className="app-container">
-          {/* Notificación Toast */}
           {notificacion && (
             <div className={`toast-notification ${notificacion.tipo}`}>
               {notificacion.mensaje}
             </div>
           )}
 
-          {/* Header - Estilo Crimson Raven */}
           <header className="main-header">
             <div className="header-content">
               <div className="logo-section">
@@ -168,6 +164,9 @@ function App() {
 
               <div className="user-section">
                 <span>⚜️ Hola, <strong>{user?.username}</strong></span>
+                <button className="cart-button" onClick={() => setModoAdmin(!modoAdmin)}>
+                  {modoAdmin ? '✦ CERRAR ATELIER' : '✦ ADMIN'}
+                </button>
                 <button className="cart-button" onClick={() => setCarritoAbierto(!carritoAbierto)}>
                   🛒 ({totalItems})
                 </button>
@@ -178,7 +177,6 @@ function App() {
             </div>
           </header>
 
-          {/* Hero Section - "Among Ravens & Crimson Roses" */}
           <section className="hero">
             <div className="hero-content">
               <h2>AMONG RAVENS &<br />CRIMSON ROSES</h2>
@@ -193,14 +191,30 @@ function App() {
             </div>
           </section>
 
-          {/* Catálogo de productos */}
           <section id="catalog" className="catalog-section">
             <div className="section-title">
               <h3>LA COLECCIÓN</h3>
               <div className="section-line"></div>
             </div>
 
-            {/* Filtros simplificados - estilo elegante */}
+            {/* Panel de Administrador */}
+            {modoAdmin && (
+              <div className="admin-panel" style={{ backgroundColor: '#111', padding: '25px', marginBottom: '30px', border: '1px solid #8b0000', borderRadius: '4px' }}>
+                <h3 style={{ color: '#d4af37', marginTop: 0, fontFamily: 'serif' }}>Añadir Nueva Creación</h3>
+                <form onSubmit={guardarNuevoProducto} style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+                  <input name="nombre" type="text" placeholder="Nombre de la pieza" required style={{ flex: '1 1 200px', padding: '10px', background: '#222', color: '#eaeaea', border: '1px solid #444' }} />
+                  <input name="precio" type="number" step="0.01" placeholder="Precio (USD)" required style={{ flex: '1 1 100px', padding: '10px', background: '#222', color: '#eaeaea', border: '1px solid #444' }} />
+                  <input name="categoria" type="text" placeholder="Categoría (Ej: Joyas)" required style={{ flex: '1 1 150px', padding: '10px', background: '#222', color: '#eaeaea', border: '1px solid #444' }} />
+                  <input name="stock" type="number" placeholder="Unidades" required style={{ flex: '1 1 100px', padding: '10px', background: '#222', color: '#eaeaea', border: '1px solid #444' }} />
+                  <input name="imagen" type="text" placeholder="Ruta de imagen (Ej: /images/anillo.jpg)" style={{ flex: '1 1 200px', padding: '10px', background: '#222', color: '#eaeaea', border: '1px solid #444' }} />
+                  <textarea name="descripcion" placeholder="Descripción de la pieza..." required style={{ flex: '1 1 100%', padding: '10px', background: '#222', color: '#eaeaea', border: '1px solid #444', minHeight: '60px' }}></textarea>
+                  <button type="submit" style={{ flex: '1 1 100%', backgroundColor: '#8b0000', color: '#fff', padding: '12px', fontWeight: 'bold', border: 'none', cursor: 'pointer', letterSpacing: '2px' }}>
+                    FORJAR ARTÍCULO EN DYNAMODB
+                  </button>
+                </form>
+              </div>
+            )}
+
             <div className="filters-wrapper">
               {categorias.map(cat => (
                 <button
@@ -213,38 +227,43 @@ function App() {
               ))}
             </div>
 
-            {/* Grid de productos */}
+            {/* Grid dinámico conectado a la nube */}
             <div className="products-grid">
-              {productosFiltrados.map((prod) => (
-                <div key={prod.id} className="product-card">
-                  <div className="product-image">
-                    <img 
-                      src={prod.imagen} 
-                      alt={prod.nombre}
-                      onError={(e) => {
-                        e.target.src = 'https://placehold.co/600x800/3b0614/d6b17a?text=CRIMSON+RAVEN';
-                      }}
-                    />
+              {cargando ? (
+                <p style={{ textAlign: 'center', width: '100%', color: '#d4af37', fontStyle: 'italic' }}>Invocando la colección desde los archivos...</p>
+              ) : productos.length === 0 ? (
+                <p style={{ textAlign: 'center', width: '100%', color: '#888' }}>La bóveda está vacía. Usa el Panel Admin para añadir tesoros.</p>
+              ) : (
+                productosFiltrados.map((prod) => (
+                  <div key={prod.id} className="product-card">
+                    <div className="product-image">
+                      <img 
+                        src={prod.imagen} 
+                        alt={prod.nombre}
+                        onError={(e) => {
+                          e.target.src = 'https://placehold.co/600x800/111111/d4af37?text=CRIMSON+RAVEN';
+                        }}
+                      />
+                    </div>
+                    <div className="product-content">
+                      <h4>{prod.nombre}</h4>
+                      <div className="card-divider"></div>
+                      <p className="price">${prod.precio.toFixed(2)}</p>
+                      <button 
+                        onClick={() => agregarAlCarrito(prod)}
+                        disabled={prod.stock === 0}
+                      >
+                        {prod.stock > 0 ? 'AÑADIR AL CARRO' : 'AGOTADO'}
+                      </button>
+                    </div>
                   </div>
-                  <div className="product-content">
-                    <h4>{prod.nombre}</h4>
-                    <div className="card-divider"></div>
-                    <p className="price">${prod.precio.toFixed(2)}</p>
-                    <button 
-                      onClick={() => agregarAlCarrito(prod)}
-                      disabled={prod.stock === 0}
-                    >
-                      {prod.stock > 0 ? 'AÑADIR AL CARRO' : 'AGOTADO'}
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </section>
 
-          {/* Footer */}
           <footer className="main-footer">
-            <p>© 2024 CRIMSON RAVEN — Atelier de Oscuridad Romántica</p>
+            <p>© 2026 CRIMSON RAVEN — Atelier de Oscuridad Romántica</p>
             <div className="socials">
               <a href="#">IG</a>
               <a href="#">FB</a>
@@ -253,7 +272,6 @@ function App() {
             </div>
           </footer>
 
-          {/* Carrito lateral deslizable */}
           <div className={`cart-sidebar ${carritoAbierto ? 'open' : ''}`}>
             <div className="cart-header">
               <h2>✦ TU CARRO ✦</h2>
@@ -272,19 +290,10 @@ function App() {
                         <p>${item.precio.toFixed(2)} c/u</p>
                       </div>
                       <div className="cart-item-controls">
-                        <button onClick={() => actualizarCantidad(item.id, item.cantidad - 1)}>
-                          -
-                        </button>
+                        <button onClick={() => actualizarCantidad(item.id, item.cantidad - 1)}> - </button>
                         <span>{item.cantidad}</span>
-                        <button onClick={() => actualizarCantidad(item.id, item.cantidad + 1)}>
-                          +
-                        </button>
-                        <button 
-                          className="remove-item"
-                          onClick={() => eliminarDelCarrito(item.id)}
-                        >
-                          ✕
-                        </button>
+                        <button onClick={() => actualizarCantidad(item.id, item.cantidad + 1)}> + </button>
+                        <button className="remove-item" onClick={() => eliminarDelCarrito(item.id)}> ✕ </button>
                       </div>
                       <p className="item-subtotal">
                         Subtotal: ${(item.precio * item.cantidad).toFixed(2)}
@@ -306,7 +315,6 @@ function App() {
             )}
           </div>
 
-          {/* Overlay para cerrar carrito */}
           {carritoAbierto && <div className="cart-overlay" onClick={() => setCarritoAbierto(false)} />}
         </div>
       )}
