@@ -276,12 +276,7 @@ function App() {
                         {prod.stock > 0 ? 'AÑADIR AL CARRO' : 'AGOTADO'}
                       </button>
 
-                      <button 
-                        onClick={() => agregarAlCarrito(prod)}
-                        disabled={prod.stock === 0}
-                      >
-                        {prod.stock > 0 ? 'AÑADIR AL CARRO' : 'AGOTADO'}
-                      </button>
+
 
                       {/* Botón de Eliminar: Solo aparece si el Modo Admin está activado */}
                       {modoAdmin && (
