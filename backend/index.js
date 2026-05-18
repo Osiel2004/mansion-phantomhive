@@ -1,5 +1,5 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, ScanCommand, PutCommand } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 
 // Inicializamos la conexión con DynamoDB
 const client = new DynamoDBClient({});
@@ -45,6 +45,20 @@ exports.handler = async (event) => {
           })
         );
         body = { mensaje: `Producto ${requestJSON.nombre} agregado exitosamente a la mansión` };
+        break;
+
+        case "DELETE":
+        // Extraemos el ID del producto que React nos pide borrar
+        let deleteJSON = JSON.parse(event.body);
+        await dynamo.send(
+          new DeleteCommand({
+            TableName: tableName,
+            Key: {
+              id: deleteJSON.id // DynamoDB busca el elemento por su ID exacto
+            }
+          })
+        );
+        body = { mensaje: `El artículo ha sido eliminado del Atelier` };
         break;
         
       default:

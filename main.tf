@@ -174,10 +174,11 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
       },
       {
         Effect = "Allow"
-        Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
+          Action = [
+          "dynamodb:PutItem",
+          "dynamodb:Scan",
+          "dynamodb:GetItem",
+          "dynamodb:DeleteItem" # <-- ¡NUEVO PERMISO!
         ]
         Resource = "arn:aws:logs:*:*:*"
       }
@@ -207,9 +208,9 @@ resource "aws_apigatewayv2_api" "http_api" {
   protocol_type = "HTTP"
   
   # Configuración CORS indispensable para que React pueda leer la API
-  cors_configuration {
+    cors_configuration {
     allow_origins = ["*"]
-    allow_methods = ["GET", "POST", "OPTIONS"]
+    allow_methods = ["GET", "POST", "DELETE", "OPTIONS"] # <-- AGREGAMOS DELETE
     allow_headers = ["content-type"]
   }
 }
@@ -252,4 +253,10 @@ resource "aws_lambda_permission" "api_gw" {
 # 7. Salida: Terraform nos dará la URL mágica
 output "api_url" {
   value = aws_apigatewayv2_stage.api_stage.invoke_url
+}
+
+resource "aws_apigatewayv2_route" "delete_productos" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "DELETE /productos"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }

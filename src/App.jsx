@@ -121,6 +121,26 @@ function App() {
       console.error("Error:", error);
       mostrarNotificacion("El ritual de guardado falló", "error");
     }
+    
+  };
+  // 3. Función para destruir un producto en la nube
+  const eliminarProductoDeLaNube = async (id) => {
+    // Pedimos confirmación para evitar accidentes
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este tesoro de la bóveda?")) return;
+
+    try {
+      mostrarNotificacion("Eliminando de los archivos...", "info");
+      await fetch(API_URL, {
+        method: 'DELETE',
+        body: JSON.stringify({ id }) // Le enviamos a Lambda el ID a borrar
+      });
+      
+      mostrarNotificacion("Pieza eliminada con éxito");
+      cargarProductos(); // Recargamos la lista para que desaparezca visualmente
+    } catch (error) {
+      console.error("Error:", error);
+      mostrarNotificacion("El ritual de eliminación falló", "error");
+    }
   };
 
   const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
@@ -255,6 +275,24 @@ function App() {
                       >
                         {prod.stock > 0 ? 'AÑADIR AL CARRO' : 'AGOTADO'}
                       </button>
+
+                      <button 
+                        onClick={() => agregarAlCarrito(prod)}
+                        disabled={prod.stock === 0}
+                      >
+                        {prod.stock > 0 ? 'AÑADIR AL CARRO' : 'AGOTADO'}
+                      </button>
+
+                      {/* Botón de Eliminar: Solo aparece si el Modo Admin está activado */}
+                      {modoAdmin && (
+                        <button 
+                          onClick={() => eliminarProductoDeLaNube(prod.id)}
+                          style={{ backgroundColor: '#8b0000', marginTop: '10px', fontSize: '0.8em', padding: '8px' }}
+                        >
+                          🗑️ ELIMINAR DEL ATELIER
+                        </button>
+                      )}
+
                     </div>
                   </div>
                 ))
