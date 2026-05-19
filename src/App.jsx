@@ -31,9 +31,14 @@ function App() {
   const administradores = [
     'al22020345@itsa.edu.mx'
   ];
+
+
   const [categoriaActiva, setCategoriaActiva] = useState('todas');
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [notificacion, setNotificacion] = useState(null);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+
+
 
   // 1. Función para descargar el catálogo desde DynamoDB
   const cargarProductos = async () => {
@@ -262,10 +267,12 @@ function App() {
               ) : (
                 productosFiltrados.map((prod) => (
                   <div key={prod.id} className="product-card">
-                    <div className="product-image">
+                      <div className="product-image">
                       <img 
                         src={prod.imagen} 
                         alt={prod.nombre}
+                        onClick={() => setProductoSeleccionado(prod)} // ¡NUEVO EVENTO!
+                        style={{ cursor: 'pointer' }} // Hace que el mouse cambie a la manita
                         onError={(e) => {
                           e.target.src = 'https://placehold.co/600x800/111111/d4af37?text=CRIMSON+RAVEN';
                         }}
@@ -310,6 +317,47 @@ function App() {
               <a href="#">YT</a>
             </div>
           </footer>
+
+          {/* Pop-up de Vista Rápida del Producto */}
+          {productoSeleccionado && (
+            <div className="cart-overlay" style={{ zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setProductoSeleccionado(null)}>
+              {/* Detenemos el clic para que al tocar la tarjeta no se cierre el fondo */}
+              <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ backgroundColor: '#111', border: '1px solid #8b0000', borderRadius: '8px', padding: '30px', maxWidth: '800px', width: '90%', display: 'flex', gap: '30px', position: 'relative' }}>
+                
+                <button className="close-cart" onClick={() => setProductoSeleccionado(null)} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: 'none', color: '#d4af37', fontSize: '1.5em', cursor: 'pointer' }}>✖</button>
+                
+                <div style={{ flex: '1' }}>
+                  <img 
+                    src={productoSeleccionado.imagen} 
+                    alt={productoSeleccionado.nombre} 
+                    style={{ width: '100%', borderRadius: '4px', border: '1px solid #333' }}
+                    onError={(e) => e.target.src = 'https://placehold.co/600x800/111111/d4af37?text=CRIMSON+RAVEN'}
+                  />
+                </div>
+                
+                <div style={{ flex: '1', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <h2 style={{ color: '#d4af37', marginTop: 0, fontFamily: 'serif', fontSize: '2em' }}>{productoSeleccionado.nombre}</h2>
+                  <p style={{ color: '#eaeaea', fontSize: '1.5em', margin: '10px 0' }}>${productoSeleccionado.precio.toFixed(2)} USD</p>
+                  <div className="card-divider" style={{ width: '100%', margin: '15px 0' }}></div>
+                  <p style={{ color: '#aaa', lineHeight: '1.6', fontStyle: 'italic', marginBottom: '20px' }}>
+                    "{productoSeleccionado.descripcion}"
+                  </p>
+                  <p style={{ color: '#666', marginBottom: '20px' }}>Disponibles en bóveda: {productoSeleccionado.stock}</p>
+                  
+                  <button 
+                    onClick={() => {
+                      agregarAlCarrito(productoSeleccionado);
+                      setProductoSeleccionado(null); // Cierra el pop-up después de agregarlo
+                    }}
+                    disabled={productoSeleccionado.stock === 0}
+                    style={{ backgroundColor: '#8b0000', color: '#fff', padding: '15px', fontWeight: 'bold', border: 'none', cursor: 'pointer', letterSpacing: '2px', width: '100%' }}
+                  >
+                    {productoSeleccionado.stock > 0 ? '✦ AÑADIR AL CARRO ✦' : 'AGOTADO'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className={`cart-sidebar ${carritoAbierto ? 'open' : ''}`}>
             <div className="cart-header">
