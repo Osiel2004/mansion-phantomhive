@@ -27,7 +27,10 @@ function App() {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [modoAdmin, setModoAdmin] = useState(false);
-
+  // Lista de administradores autorizados (puedes expandirla o gestionarla desde la nube)
+  const administradores = [
+    'al22020345@itsa.edu.mx'
+  ];
   const [categoriaActiva, setCategoriaActiva] = useState('todas');
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [notificacion, setNotificacion] = useState(null);
