@@ -1,6 +1,6 @@
 /* =========================================================
    THE CRIMSON RAVEN
-   PORTFOLIO EDITION - CORREGIDO
+   PORTFOLIO EDITION - TAMAÑO PERFECTO
 ========================================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@200;300;400;500&display=swap');
@@ -48,7 +48,7 @@ body::before{
 }
 
 /* =========================================================
-   HEADER - CORREGIDO (más compacto)
+   HEADER - TAMAÑO MEDIO
 ========================================================= */
 
 .main-header{
@@ -76,7 +76,7 @@ body::before{
 .header-content{
     width:92%;
     max-width:1400px;
-    height:70px; /* Reducido de 90px a 70px */
+    height:80px;
     margin:auto;
     display:flex;
     justify-content:space-between;
@@ -84,18 +84,18 @@ body::before{
 }
 
 /* =========================================================
-   LOGO - CORREGIDO (tamaños reducidos)
+   LOGO - TAMAÑO MEDIO
 ========================================================= */
 
 .logo-section{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
 }
 
 .logo{
-    width:48px; /* Reducido de 72px a 48px */
-    height:48px;
+    width:56px;
+    height:56px;
     border-radius:50%;
     overflow:hidden;
     flex-shrink:0;
@@ -117,35 +117,35 @@ body::before{
 .logo-text h1{
     font-family:'Cinzel', serif;
     color:var(--text);
-    font-size:1.3rem; /* Reducido de 2.1rem a 1.3rem */
+    font-size:1.6rem;
     font-weight:700;
     line-height:1.2;
     letter-spacing: 1px;
 }
 
 .logo-text p{
-    margin-top:2px;
+    margin-top:3px;
     color:#f0d8bb;
-    font-size:0.7rem; /* Reducido de 1rem a 0.7rem */
+    font-size:0.8rem;
     font-family:'Cormorant Garamond', serif;
     letter-spacing: 0.5px;
 }
 
 /* =========================================================
-   NAV - CORREGIDO
+   NAV - TAMAÑO MEDIO
 ========================================================= */
 
 .main-nav{
     display:flex;
     align-items:center;
-    gap:25px;
+    gap:30px;
 }
 
 .main-nav a{
     text-decoration:none;
     color:var(--text);
     font-family:'Cinzel', serif;
-    font-size:0.75rem; /* Reducido de 0.95rem a 0.75rem */
+    font-size:0.85rem;
     letter-spacing:1px;
     transition:.35s;
 }
@@ -156,18 +156,18 @@ body::before{
 }
 
 /* =========================================================
-   USER SECTION - CORREGIDO
+   USER SECTION - TAMAÑO MEDIO
 ========================================================= */
 
 .user-section{
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 18px;
 }
 
 .user-section span{
     font-family:'Inter', sans-serif;
-    font-size:0.7rem;
+    font-size:0.8rem;
     color:var(--text);
 }
 
@@ -175,16 +175,16 @@ body::before{
     color:var(--gold);
     font-family:'Cinzel', serif;
     font-weight: 600;
-    font-size:0.7rem;
+    font-size:0.8rem;
 }
 
 .cart-button, .logout-button{
-    padding: 5px 14px; /* Reducido */
+    padding: 6px 16px;
     background: transparent;
     border: 1px solid rgba(214,177,122,.25);
     color: var(--text);
     font-family: 'Cinzel', serif;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: .35s;
     letter-spacing: 1px;
@@ -197,12 +197,12 @@ body::before{
 }
 
 /* =========================================================
-   HERO - CORREGIDO (tamaños más proporcionados)
+   HERO - TAMAÑO MEDIO
 ========================================================= */
 
 .hero{
-    margin-top:70px; /* Ajustado al nuevo header */
-    min-height:calc(100vh - 70px);
+    margin-top:80px;
+    min-height:calc(100vh - 80px);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -246,20 +246,20 @@ body::before{
 
 .hero h2{
     font-family:'Cinzel', serif;
-    font-size:3rem; /* Reducido de 6rem a 3rem */
+    font-size:4rem;
     line-height:1.2;
     color:var(--gold);
     font-weight:500;
     letter-spacing:2px;
-    margin-bottom:20px;
+    margin-bottom:25px;
     text-shadow: 0 0 18px rgba(214,177,122,.08);
 }
 
 /* LINEA DECORATIVA */
 .divider{
-    width:200px; /* Reducido de 320px a 200px */
+    width:260px;
     height:1px;
-    margin:25px auto;
+    margin:28px auto;
     background: linear-gradient(to right, transparent, var(--gold), transparent);
     position:relative;
 }
@@ -271,29 +271,29 @@ body::before{
     top:50%;
     transform: translate(-50%,-50%);
     background: var(--black);
-    padding:0 15px;
+    padding:0 18px;
     color:var(--gold-soft);
-    font-size:0.8rem;
+    font-size:0.9rem;
 }
 
 .hero p{
     font-family:'Cormorant Garamond', serif;
-    font-size:1.1rem; /* Reducido de 2rem a 1.1rem */
+    font-size:1.3rem;
     line-height:1.6;
     color:var(--text);
-    max-width:600px;
-    margin:auto auto 35px;
+    max-width:650px;
+    margin:auto auto 40px;
 }
 
 /* BOTÓN HERO */
 .hero button{
-    padding:12px 32px; /* Reducido */
+    padding:14px 38px;
     background: linear-gradient(135deg, var(--wine), var(--crimson));
     border: 1px solid rgba(214,177,122,.15);
     color: var(--text);
     font-family: 'Cinzel', serif;
     letter-spacing: 1px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: .4s;
     box-shadow: 0 10px 25px rgba(0,0,0,.35);
@@ -313,25 +313,25 @@ body::before{
     width:90%;
     max-width:1400px;
     margin:auto;
-    padding:60px 0 100px;
+    padding:70px 0 100px;
 }
 
 .section-title{
     text-align:center;
-    margin-bottom:50px;
+    margin-bottom:55px;
 }
 
 .section-title h3{
     font-family:'Cinzel', serif;
     color:var(--gold);
-    font-size:1.8rem; /* Reducido de 3rem a 1.8rem */
+    font-size:2.2rem;
     font-weight:500;
-    margin-bottom:12px;
+    margin-bottom:15px;
     letter-spacing: 2px;
 }
 
 .section-line{
-    width:300px; /* Reducido de 500px a 300px */
+    width:380px;
     height:1px;
     margin:auto;
     background: linear-gradient(to right, transparent, var(--gold-soft), transparent);
@@ -344,18 +344,18 @@ body::before{
 .filters-wrapper{
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 15px;
     flex-wrap: wrap;
-    margin-bottom: 45px;
+    margin-bottom: 50px;
 }
 
 .filter-chip{
-    padding: 6px 20px;
+    padding: 8px 24px;
     background: transparent;
     border: 1px solid rgba(214, 177, 122, 0.25);
     color: var(--text);
     font-family: 'Cinzel', serif;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     letter-spacing: 1.5px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -373,13 +373,13 @@ body::before{
 }
 
 /* =========================================================
-   GRID - TAMAÑOS AJUSTADOS
+   GRID - TAMAÑO MEDIO
 ========================================================= */
 
 .products-grid{
     display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap:30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap:35px;
 }
 
 .product-card{
@@ -397,7 +397,7 @@ body::before{
 }
 
 .product-image{
-    height:320px; /* Reducido de 420px a 320px */
+    height:360px;
     overflow:hidden;
 }
 
@@ -413,22 +413,22 @@ body::before{
 }
 
 .product-content{
-    padding:20px; /* Reducido de 30px a 20px */
+    padding:24px;
 }
 
 .product-content h4{
     font-family:'Cinzel', serif;
     color:var(--gold);
-    font-size:1.1rem; /* Reducido de 2rem a 1.1rem */
+    font-size:1.3rem;
     line-height:1.3;
     text-align:center;
-    margin-bottom:12px;
+    margin-bottom:14px;
 }
 
 .card-divider{
-    width:80px; /* Reducido de 120px a 80px */
+    width:100px;
     height:1px;
-    margin:12px auto;
+    margin:14px auto;
     background: linear-gradient(to right, transparent, var(--gold-soft), transparent);
 }
 
@@ -436,18 +436,18 @@ body::before{
     text-align:center;
     color:#c24d63;
     font-family:'Cormorant Garamond', serif;
-    font-size:1.3rem; /* Reducido de 2rem a 1.3rem */
-    margin-bottom:18px;
+    font-size:1.5rem;
+    margin-bottom:20px;
 }
 
 .product-content button{
     width:100%;
-    padding:10px; /* Reducido de 16px a 10px */
+    padding:12px;
     background:transparent;
     border: 1px solid rgba(214,177,122,.18);
     color:var(--text);
     font-family:'Cinzel', serif;
-    font-size:0.7rem;
+    font-size:0.8rem;
     letter-spacing:1px;
     cursor:pointer;
     transition:.4s;
@@ -470,7 +470,7 @@ body::before{
 
 .main-footer{
     border-top: 1px solid rgba(214,177,122,.12);
-    padding:25px 5%;
+    padding:30px 5%;
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -481,17 +481,17 @@ body::before{
 .main-footer p{
     color:var(--gray);
     font-family:'Cormorant Garamond', serif;
-    font-size:0.8rem;
+    font-size:0.9rem;
 }
 
 .socials{
     display:flex;
-    gap:15px;
+    gap:18px;
 }
 
 .socials a{
     color:var(--gold);
-    font-size:0.9rem;
+    font-size:1rem;
     text-decoration:none;
     transition:.3s;
     font-family:'Cinzel', serif;
@@ -509,8 +509,8 @@ body::before{
 .cart-sidebar{
     position:fixed;
     top:0;
-    right:-400px;
-    width:400px;
+    right:-420px;
+    width:420px;
     height:100vh;
     background: linear-gradient(180deg, #0d0b10, #070709);
     border-left: 1px solid var(--border);
@@ -528,13 +528,13 @@ body::before{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px;
+    padding:22px;
     border-bottom: 1px solid var(--border);
 }
 
 .cart-header h2{
     font-family:'Cinzel', serif;
-    font-size:1rem;
+    font-size:1.1rem;
     color:var(--gold);
     letter-spacing:2px;
 }
@@ -543,7 +543,7 @@ body::before{
     background:none;
     border:none;
     color:var(--text);
-    font-size:1.2rem;
+    font-size:1.3rem;
     cursor:pointer;
     transition:.3s;
 }
@@ -555,44 +555,44 @@ body::before{
 
 .empty-cart{
     text-align:center;
-    padding:50px;
+    padding:55px;
     color:var(--gray);
     font-family:'Cormorant Garamond', serif;
-    font-size:1rem;
+    font-size:1.1rem;
 }
 
 .cart-items{
     flex:1;
     overflow-y:auto;
-    padding:15px;
+    padding:18px;
 }
 
 .cart-item{
     border-bottom: 1px solid var(--border);
-    padding:12px 0;
+    padding:14px 0;
 }
 
 .cart-item-info h4{
     font-family:'Cinzel', serif;
-    font-size:0.85rem;
-    margin-bottom:4px;
+    font-size:0.95rem;
+    margin-bottom:5px;
 }
 
 .cart-item-info p{
     color:var(--gold-soft);
-    font-size:0.75rem;
+    font-size:0.85rem;
 }
 
 .cart-item-controls{
     display:flex;
     align-items:center;
-    gap:10px;
-    margin:10px 0;
+    gap:12px;
+    margin:12px 0;
 }
 
 .cart-item-controls button{
-    width:26px;
-    height:26px;
+    width:28px;
+    height:28px;
     background:transparent;
     border:1px solid var(--border);
     color:var(--text);
@@ -606,10 +606,10 @@ body::before{
 }
 
 .cart-item-controls span{
-    min-width:25px;
+    min-width:28px;
     text-align:center;
     font-family:'Cinzel', serif;
-    font-size:0.8rem;
+    font-size:0.9rem;
 }
 
 .remove-item{
@@ -625,11 +625,11 @@ body::before{
 .item-subtotal{
     text-align:right;
     color:var(--gold-soft);
-    font-size:0.75rem;
+    font-size:0.85rem;
 }
 
 .cart-footer{
-    padding:15px;
+    padding:18px;
     border-top: 1px solid var(--border);
     background:rgba(0,0,0,.3);
 }
@@ -637,21 +637,21 @@ body::before{
 .cart-total{
     display:flex;
     justify-content:space-between;
-    font-size:1rem;
-    margin-bottom:15px;
-    padding:8px 0;
+    font-size:1.1rem;
+    margin-bottom:18px;
+    padding:10px 0;
     font-family:'Cinzel', serif;
     color:var(--gold);
 }
 
 .checkout-button{
     width:100%;
-    padding:10px;
+    padding:12px;
     background:linear-gradient(135deg, var(--wine), var(--crimson));
     border:1px solid var(--border);
     color:var(--text);
     font-family:'Cinzel', serif;
-    font-size:0.75rem;
+    font-size:0.85rem;
     cursor:pointer;
     transition:.3s;
     letter-spacing:2px;
@@ -677,12 +677,12 @@ body::before{
     position:fixed;
     bottom:30px;
     right:30px;
-    padding:10px 20px;
+    padding:12px 24px;
     background:var(--crimson);
     border-left:3px solid var(--gold);
     color:var(--text);
     font-family:'Cinzel', serif;
-    font-size:0.7rem;
+    font-size:0.8rem;
     z-index:2000;
     animation:slideUp 0.3s ease;
     box-shadow:var(--shadow);
@@ -710,16 +710,16 @@ body::before{
 
 @media(max-width:900px){
     .hero h2{
-        font-size:2.2rem;
+        font-size:3rem;
     }
     .hero p{
-        font-size:0.95rem;
+        font-size:1.1rem;
     }
     .main-nav{
-        gap:15px;
+        gap:20px;
     }
     .products-grid{
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
 }
 
@@ -727,20 +727,23 @@ body::before{
     .header-content{
         flex-direction:column;
         height:auto;
-        padding:12px 0;
+        padding:15px 0;
     }
     .main-nav{
         flex-wrap:wrap;
         justify-content:center;
-        gap:12px;
-        margin:8px 0;
+        gap:15px;
+        margin:10px 0;
     }
     .hero{
-        margin-top:110px;
-        padding:60px 20px;
+        margin-top:130px;
+        padding:70px 20px;
     }
     .hero h2{
-        font-size:1.8rem;
+        font-size:2.2rem;
+    }
+    .hero p{
+        font-size:1rem;
     }
     .section-line{
         width:80%;
@@ -753,22 +756,25 @@ body::before{
         flex-wrap:wrap;
         justify-content:center;
     }
+    .section-title h3{
+        font-size:1.8rem;
+    }
 }
 
 @media(max-width:480px){
     .hero h2{
-        font-size:1.4rem;
+        font-size:1.8rem;
     }
     .hero p{
-        font-size:0.85rem;
+        font-size:0.9rem;
     }
     .section-title h3{
-        font-size:1.3rem;
+        font-size:1.5rem;
     }
     .product-content h4{
-        font-size:0.95rem;
+        font-size:1.1rem;
     }
     .price{
-        font-size:1.1rem;
+        font-size:1.3rem;
     }
 }
