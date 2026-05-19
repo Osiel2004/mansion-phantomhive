@@ -183,7 +183,7 @@ function App() {
               </nav>
 
               <div className="user-section">
-                <span>⚜️ Hola, <strong>{user?.username}</strong></span>
+                <span>⚜️ Hola, <strong>{user?.signInDetails?.loginId || user?.attributes?.email}</strong></span>
                 <button className="cart-button" onClick={() => setModoAdmin(!modoAdmin)}>
                   {modoAdmin ? '✦ CERRAR ATELIER' : '✦ ADMIN'}
                 </button>
