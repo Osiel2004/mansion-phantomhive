@@ -187,9 +187,12 @@ function App() {
 
               <div className="user-section">
                 <span>⚜️ Hola, <strong>{user?.signInDetails?.loginId || user?.attributes?.email}</strong></span>
-                <button className="cart-button" onClick={() => setModoAdmin(!modoAdmin)}>
-                  {modoAdmin ? '✦ CERRAR ATELIER' : '✦ ADMIN'}
-                </button>
+                {/* Verificamos si el correo del usuario actual está en la lista VIP */}
+                {administradores.includes(user?.signInDetails?.loginId || user?.attributes?.email) && (
+                  <button className="cart-button" onClick={() => setModoAdmin(!modoAdmin)}>
+                    {modoAdmin ? '✦ CERRAR ATELIER' : '✦ ADMIN'}
+                  </button>
+                )}
                 <button className="cart-button" onClick={() => setCarritoAbierto(!carritoAbierto)}>
                   🛒 ({totalItems})
                 </button>
