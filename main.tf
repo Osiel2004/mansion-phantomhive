@@ -164,21 +164,23 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
     Version = "2012-10-17"
     Statement = [
       {
+        # Este es el bloque de DynamoDB (Aquí sí va el DeleteItem)
         Effect = "Allow"
         Action = [
           "dynamodb:PutItem",
           "dynamodb:Scan",
-          "dynamodb:GetItem"
+          "dynamodb:GetItem",
+          "dynamodb:DeleteItem" 
         ]
         Resource = aws_dynamodb_table.catalogo_productos.arn
       },
       {
+        # Este es el bloque de los Logs (Lo restauramos a la normalidad)
         Effect = "Allow"
-          Action = [
-          "dynamodb:PutItem",
-          "dynamodb:Scan",
-          "dynamodb:GetItem",
-          "dynamodb:DeleteItem" # <-- ¡NUEVO PERMISO!
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
         ]
         Resource = "arn:aws:logs:*:*:*"
       }
