@@ -311,7 +311,7 @@ function App() {
           <footer className="main-footer">
             <p>© 2026 CRIMSON RAVEN — Atelier de Oscuridad Romántica</p>
             <div className="socials">
-              <a href="#">IG</a>
+              <a href="https://www.instagram.com/nyx_bee24/">IG</a>
               <a href="#">FB</a>
               <a href="#">X</a>
               <a href="#">YT</a>
