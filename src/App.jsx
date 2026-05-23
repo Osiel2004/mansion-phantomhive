@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { useState, useEffect } from 'react';
 import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -224,7 +224,7 @@ function App() {
     ]);
 
     // Dibujar la tabla
-    doc.autoTable({
+    autoTable(doc, {
       startY: 55,
       head: [columnas],
       body: filas,
