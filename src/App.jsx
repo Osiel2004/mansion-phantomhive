@@ -1,3 +1,5 @@
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import { useState, useEffect } from 'react';
 import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -136,6 +138,97 @@ function App() {
     // Pedimos confirmación para evitar accidentes
     if (!window.confirm("¿Estás seguro de que deseas eliminar este tesoro de la bóveda?")) return;
 
+
+  // ----------------------------------------------------
+  // FUNCIONES DE REPORTES (Punto 7 de la Rúbrica)
+  // ----------------------------------------------------
+
+  // A) Generar Reporte CSV del Inventario (Para el Administrador)
+  const descargarInventarioCSV = () => {
+    if (productos.length === 0) return mostrarNotificacion("La bóveda está vacía", "error");
+
+    // 1. Definir las cabeceras de las columnas
+    const cabeceras = ['ID', 'Nombre', 'Categoria', 'Precio_USD', 'Stock_Disponible'];
+    
+    // 2. Mapear los productos a formato de filas separadas por comas
+    const filas = productos.map(p => [
+      p.id, 
+      `"${p.nombre}"`, // Entre comillas por si el nombre tiene espacios o comas
+      p.categoria, 
+      p.precio, 
+      p.stock
+    ]);
+
+    // 3. Unir todo con saltos de línea
+    const contenidoCSV = [cabeceras.join(','), ...filas.map(f => f.join(','))].join('\n');
+
+    // 4. Crear el archivo "falso" en el navegador y forzar la descarga
+    const blob = new Blob([contenidoCSV], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'inventario_crimson_raven.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    mostrarNotificacion("Reporte de inventario CSV descargado");
+  };
+
+  // B) Generar Recibo en PDF (Para el Cliente en el Carrito)
+  const generarReciboPDF = () => {
+    if (carrito.length === 0) return mostrarNotificacion("El carro está vacío", "error");
+
+    const doc = new jsPDF();
+
+    // Estilo del documento
+    doc.setFontSize(22);
+    doc.setTextColor(139, 0, 0); // Color rojo Crimson
+    doc.text("CRIMSON RAVEN", 14, 20);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(50, 50, 50);
+    doc.text("Atelier de Oscuridad Romántica", 14, 28);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Fecha del ritual: ${new Date().toLocaleDateString()}`, 14, 40);
+    doc.text(`Identidad del cliente: ${user?.signInDetails?.loginId || user?.attributes?.email || 'Desconocido'}`, 14, 48);
+
+    // Preparar los datos de la tabla del carrito
+    const columnas = ["Artículo", "Cantidad", "Precio Unitario", "Subtotal"];
+    const filas = carrito.map(item => [
+      item.nombre,
+      item.cantidad,
+      `$${item.precio.toFixed(2)}`,
+      `$${(item.precio * item.cantidad).toFixed(2)}`
+    ]);
+
+    // Dibujar la tabla
+    doc.autoTable({
+      startY: 55,
+      head: [columnas],
+      body: filas,
+      theme: 'grid',
+      headStyles: { fillColor: [139, 0, 0], textColor: [255, 255, 255] },
+      styles: { font: 'helvetica' }
+    });
+
+    // Añadir el Total al final de la tabla
+    const finalY = doc.lastAutoTable.finalY || 55;
+    doc.setFontSize(16);
+    doc.setTextColor(139, 0, 0);
+    doc.text(`Total del Tributo: $${totalPrecio.toFixed(2)} USD`, 14, finalY + 15);
+
+    // Guardar el PDF
+    doc.save("recibo_crimson_raven.pdf");
+    mostrarNotificacion("Recibo forjado en PDF con éxito");
+    
+    // Opcional: Vaciar el carrito después de "pagar"
+    setCarrito([]); 
+    setCarritoAbierto(false);
+  };
+
     try {
       mostrarNotificacion("Eliminando de los archivos...", "info");
       await fetch(API_URL, {
@@ -267,7 +360,12 @@ const productosFiltrados = productos.filter(p => {
             {/* Panel de Administrador */}
             {modoAdmin && (
               <div className="admin-panel" style={{ backgroundColor: '#111', padding: '25px', marginBottom: '30px', border: '1px solid #8b0000', borderRadius: '4px' }}>
-                <h3 style={{ color: '#d4af37', marginTop: 0, fontFamily: 'serif' }}>Añadir Nueva Creación</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 style={{ color: '#d4af37', marginTop: 0, fontFamily: 'serif' }}>Añadir Nueva Creación</h3>
+                  <button onClick={descargarInventarioCSV} style={{ backgroundColor: '#222', color: '#d4af37', border: '1px solid #d4af37', padding: '8px 15px', cursor: 'pointer' }}>
+                    📊 Descargar Inventario (CSV)
+                  </button>
+                </div>
                 <form onSubmit={guardarNuevoProducto} style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
                   <input name="nombre" type="text" placeholder="Nombre de la pieza" required style={{ flex: '1 1 200px', padding: '10px', background: '#222', color: '#eaeaea', border: '1px solid #444' }} />
                   <input name="precio" type="number" step="0.01" placeholder="Precio (USD)" required style={{ flex: '1 1 100px', padding: '10px', background: '#222', color: '#eaeaea', border: '1px solid #444' }} />
@@ -430,9 +528,9 @@ const productosFiltrados = productos.filter(p => {
                     <strong>TOTAL:</strong>
                     <strong>${totalPrecio.toFixed(2)}</strong>
                   </div>
-                  <button className="checkout-button" onClick={() => alert('Próximamente: Integración con Stripe')}>
-                    PROCEDER AL PAGO
-                  </button>
+                    <button className="checkout-button" onClick={generarReciboPDF} style={{ backgroundColor: '#8b0000', color: '#fff', border: 'none', padding: '15px', width: '100%', fontWeight: 'bold', cursor: 'pointer', letterSpacing: '2px', marginTop: '10px' }}>
+                        ✦ GENERAR RECIBO (PDF) ✦
+                    </button>
                 </div>
               </>
             )}
