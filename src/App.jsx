@@ -32,7 +32,7 @@ function App() {
     'al22020345@itsa.edu.mx'
   ];
 
-
+  const [busqueda, setBusqueda] = useState('');
   const [categoriaActiva, setCategoriaActiva] = useState('todas');
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [notificacion, setNotificacion] = useState(null);
@@ -154,9 +154,18 @@ function App() {
   const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
   const totalPrecio = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
-  const productosFiltrados = categoriaActiva === 'todas'
-    ? productos
-    : productos.filter(p => p.categoria === categoriaActiva);
+  const productosFiltrados = productos.filter(p => {
+      // 1. ¿Cumple con la categoría seleccionada?
+      const coincideCategoria = categoriaActiva === 'todas' || p.categoria === categoriaActiva;
+      
+      // 2. ¿Coincide con el texto de búsqueda? (Pasamos todo a minúsculas para que no haya errores)
+      const textoBusqueda = busqueda.toLowerCase();
+      const coincideTexto = p.nombre.toLowerCase().includes(textoBusqueda) || 
+                            p.descripcion.toLowerCase().includes(textoBusqueda);
+      
+      // Solo mostramos el producto si cumple AMBAS condiciones
+      return coincideCategoria && coincideTexto;
+    });
 
   const categorias = ['todas', ...new Set(productos.map(p => p.categoria))];
 
@@ -189,6 +198,27 @@ function App() {
                 <a href="#">ATELIER</a>
                 <a href="#">CONTACTO</a>
               </nav>
+
+              {/* NUEVA BARRA DE BÚSQUEDA */}
+              <div className="search-bar" style={{ display: 'flex', alignItems: 'center', margin: '0 20px' }}>
+                <span style={{ position: 'absolute', marginLeft: '10px', color: '#888' }}>🔍</span>
+                <input 
+                  type="text" 
+                  placeholder="Buscar en el Atelier..." 
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  style={{ 
+                    padding: '8px 10px 8px 35px', 
+                    borderRadius: '20px', 
+                    border: '1px solid #444', 
+                    background: '#222', 
+                    color: '#eaeaea',
+                    width: '250px',
+                    outline: 'none',
+                    fontFamily: 'serif'
+                  }} 
+                />
+              </div>
 
               <div className="user-section">
                 <span>⚜️ Hola, <strong>{user?.signInDetails?.loginId || user?.attributes?.email}</strong></span>
