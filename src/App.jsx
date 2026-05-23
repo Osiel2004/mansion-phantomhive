@@ -192,14 +192,15 @@ function App() {
   };
 
   // B) Generar Recibo en PDF (Para el Cliente en el Carrito)
-  const generarReciboPDF = () => {
+  // ¡NUEVO!: Ahora recibimos 'usuarioActual' como parámetro
+  const generarReciboPDF = (usuarioActual) => {
     if (carrito.length === 0) return mostrarNotificacion("El carro está vacío", "error");
 
     const doc = new jsPDF();
 
     // Estilo del documento
     doc.setFontSize(22);
-    doc.setTextColor(139, 0, 0); // Color rojo Crimson
+    doc.setTextColor(139, 0, 0); 
     doc.text("CRIMSON RAVEN", 14, 20);
     
     doc.setFontSize(14);
@@ -209,7 +210,9 @@ function App() {
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     doc.text(`Fecha del ritual: ${new Date().toLocaleDateString()}`, 14, 40);
-    doc.text(`Identidad del cliente: ${user?.signInDetails?.loginId || user?.attributes?.email || 'Desconocido'}`, 14, 48);
+    
+    // ¡NUEVO!: Usamos la variable que le pasamos desde el botón
+    doc.text(`Identidad del cliente: ${usuarioActual?.signInDetails?.loginId || usuarioActual?.attributes?.email || 'Desconocido'}`, 14, 48);
 
     // Preparar los datos de la tabla del carrito
     const columnas = ["Artículo", "Cantidad", "Precio Unitario", "Subtotal"];
@@ -240,12 +243,12 @@ function App() {
     doc.save("recibo_crimson_raven.pdf");
     mostrarNotificacion("Recibo forjado en PDF con éxito");
     
-    // Opcional: Vaciar el carrito después de "pagar"
+
     setCarrito([]); 
     setCarritoAbierto(false);
   };
   
-  
+
 
   const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
   const totalPrecio = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
@@ -531,7 +534,7 @@ const productosFiltrados = productos.filter(p => {
                     <strong>TOTAL:</strong>
                     <strong>${totalPrecio.toFixed(2)}</strong>
                   </div>
-                    <button className="checkout-button" onClick={generarReciboPDF} style={{ backgroundColor: '#8b0000', color: '#fff', border: 'none', padding: '15px', width: '100%', fontWeight: 'bold', cursor: 'pointer', letterSpacing: '2px', marginTop: '10px' }}>
+                    <button className="checkout-button" onClick={() => generarReciboPDF(user)} style={{ backgroundColor: '#8b0000', color: '#fff', border: 'none', padding: '15px', width: '100%', fontWeight: 'bold', cursor: 'pointer', letterSpacing: '2px', marginTop: '10px' }}>
                         ✦ GENERAR RECIBO (PDF) ✦
                     </button>
                 </div>
