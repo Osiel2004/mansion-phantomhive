@@ -139,6 +139,22 @@ function App() {
     if (!window.confirm("¿Estás seguro de que deseas eliminar este tesoro de la bóveda?")) return;
 
 
+
+
+    try {
+      mostrarNotificacion("Eliminando de los archivos...", "info");
+      await fetch(API_URL, {
+        method: 'DELETE',
+        body: JSON.stringify({ id }) // Le enviamos a Lambda el ID a borrar
+      });
+      
+      mostrarNotificacion("Pieza eliminada con éxito");
+      cargarProductos(); // Recargamos la lista para que desaparezca visualmente
+    } catch (error) {
+      console.error("Error:", error);
+      mostrarNotificacion("El ritual de eliminación falló", "error");
+    }
+  };
   // ----------------------------------------------------
   // FUNCIONES DE REPORTES (Punto 7 de la Rúbrica)
   // ----------------------------------------------------
@@ -228,21 +244,8 @@ function App() {
     setCarrito([]); 
     setCarritoAbierto(false);
   };
-
-    try {
-      mostrarNotificacion("Eliminando de los archivos...", "info");
-      await fetch(API_URL, {
-        method: 'DELETE',
-        body: JSON.stringify({ id }) // Le enviamos a Lambda el ID a borrar
-      });
-      
-      mostrarNotificacion("Pieza eliminada con éxito");
-      cargarProductos(); // Recargamos la lista para que desaparezca visualmente
-    } catch (error) {
-      console.error("Error:", error);
-      mostrarNotificacion("El ritual de eliminación falló", "error");
-    }
-  };
+  
+  
 
   const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
   const totalPrecio = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
