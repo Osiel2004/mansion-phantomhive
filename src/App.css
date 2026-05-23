@@ -376,13 +376,18 @@ body::before{
    GRID - TAMAÑO MEDIO
 ========================================================= */
 
-.products-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap:35px;
+.products-grid {
+  display: grid;
+  /* Reemplaza auto-fit por auto-fill, esto evita que un solo elemento ocupe toda la fila */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  justify-content: center; /* Si solo hay uno, lo mantendrá centrado en la pantalla */
 }
 
 .product-card{
+    max-width: 380px; /* Límite máximo de ancho. Ajusta este número según te guste */
+    width: 100%;
+    margin: 0 auto; /* Asegura que la tarjeta se centre en su columna */
     background: linear-gradient(180deg, rgba(14,10,16,.96), rgba(8,8,10,.98));
     border: 1px solid rgba(214,177,122,.12);
     overflow:hidden;
@@ -401,11 +406,12 @@ body::before{
     overflow:hidden;
 }
 
-.product-image img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transition:1s;
+.product-image img {
+  width: 100%;
+  height: 400px; /* Obliga a todas las fotos a medir lo mismo de alto */
+  object-fit: cover; /* ¡EL SECRETO! Recorta la foto sin deformarla */
+  object-position: center; /* Enfoca el centro de la imagen */
+  border-radius: 4px 4px 0 0; /* Opcional: redondea las esquinas superiores */
 }
 
 .product-card:hover img{
