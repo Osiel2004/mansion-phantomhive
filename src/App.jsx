@@ -154,18 +154,24 @@ function App() {
   const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
   const totalPrecio = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
-  const productosFiltrados = productos.filter(p => {
-      // 1. ¿Cumple con la categoría seleccionada?
-      const coincideCategoria = categoriaActiva === 'todas' || p.categoria === categoriaActiva;
-      
-      // 2. ¿Coincide con el texto de búsqueda? (Pasamos todo a minúsculas para que no haya errores)
-      const textoBusqueda = busqueda.toLowerCase();
-      const coincideTexto = p.nombre.toLowerCase().includes(textoBusqueda) || 
-                            p.descripcion.toLowerCase().includes(textoBusqueda);
-      
-      // Solo mostramos el producto si cumple AMBAS condiciones
-      return coincideCategoria && coincideTexto;
-    });
+const productosFiltrados = productos.filter(p => {
+    // 1. ¿Cumple con la categoría seleccionada?
+    const coincideCategoria = categoriaActiva === 'todas' || p.categoria === categoriaActiva;
+    
+    // 2. ¿Coincide con el texto de búsqueda?
+    const textoBusqueda = busqueda.toLowerCase();
+    
+    // ¡LA CORRECCIÓN ESTÁ AQUÍ! 
+    // Si el nombre o la descripción no existen (porque son productos viejos), usamos un texto vacío ('')
+    const nombreSeguro = (p.nombre || '').toLowerCase();
+    const descripcionSegura = (p.descripcion || '').toLowerCase();
+    
+    const coincideTexto = nombreSeguro.includes(textoBusqueda) || 
+                          descripcionSegura.includes(textoBusqueda);
+    
+    // Solo mostramos el producto si cumple AMBAS condiciones
+    return coincideCategoria && coincideTexto;
+  });
 
   const categorias = ['todas', ...new Set(productos.map(p => p.categoria))];
 
