@@ -28,19 +28,20 @@ exports.handler = async (event) => {
         body = scanResult.Items;
         break;
         
-      case "POST":
-        // Si es POST, viene desde nuestro futuro panel de administrador para agregar un producto
+case "POST":
+        // Si es POST, viene desde nuestro panel de administrador para agregar un producto
         let requestJSON = JSON.parse(event.body);
         await dynamo.send(
           new PutCommand({
             TableName: tableName,
             Item: {
-              id: requestJSON.id.toString(), // DynamoDB requiere que el ID sea texto según nuestro Terraform
+              id: requestJSON.id.toString(), 
               nombre: requestJSON.nombre,
               precio: Number(requestJSON.precio),
               categoria: requestJSON.categoria,
               stock: Number(requestJSON.stock),
-              imagen: requestJSON.imagen || ""
+              imagen: requestJSON.imagen || "",
+              descripcion: requestJSON.descripcion // <-- ¡ESTA ES LA LÍNEA MÁGICA QUE FALTA!
             },
           })
         );
