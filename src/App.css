@@ -24,18 +24,23 @@
     box-sizing:border-box;
 }
 
-html{
-    scroll-behavior:smooth;
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
-body{
-    font-family:'Inter', sans-serif;
+body {
+    font-family: 'Inter', sans-serif;
     background: linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.82)), url("img/background-texture.jpg");
-    background-size:cover;
-    background-attachment:fixed;
-    background-position:center;
-    color:var(--text);
-    overflow-x:hidden;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color: var(--text);
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
 body::before{
@@ -200,16 +205,17 @@ body::before{
    HERO - TAMAÑO MEDIO
 ========================================================= */
 
-.hero{
-    margin-top:80px;
-    min-height:calc(100vh - 80px);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:100px 20px 80px;
-    position:relative;
+.hero {
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 100px 20px 80px;
+    position: relative;
     background: linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.72));
+    overflow: hidden; /* <-- Esta es la línea que cortará las rosas sobrantes */
 }
 
 .hero::before{
