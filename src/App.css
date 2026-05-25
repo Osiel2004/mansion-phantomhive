@@ -730,57 +730,107 @@ body::before{
 }
 
 @media(max-width:768px){
+    /* 1. Reorganizar el Header con Flexbox Wrap y Order */
     .header-content{
-        flex-direction:column;
-        height:auto;
-        padding:15px 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        height: auto;
+        padding: 15px 5%;
+        gap: 12px;
     }
-    .main-nav{
-        flex-wrap:wrap;
-        justify-content:center;
-        gap:15px;
-        margin:10px 0;
+    
+    .logo-section{
+        order: 1;
+        width: 45%; /* Toma la mitad izquierda */
     }
-    .hero{
-        margin-top:130px;
-        padding:70px 20px;
-    }
-    .hero h2{
-        font-size:2.2rem;
-    }
-    .hero p{
-        font-size:1rem;
-    }
-    .section-line{
-        width:80%;
-    }
-    .cart-sidebar{
-        width:100%;
-        right:-100%;
-    }
+
     .user-section{
-        flex-wrap:wrap;
-        justify-content:center;
+        order: 2;
+        width: 50%; /* Toma la mitad derecha */
+        justify-content: flex-end;
+        gap: 8px;
     }
+
+    /* 2. Ocultar el saludo largo para ahorrar espacio */
+    .user-section span {
+        display: none; 
+    }
+
+    /* 3. Barra de Búsqueda al 100% (Usamos !important para sobreescribir el estilo de App.jsx) */
+    .search-bar{
+        order: 3;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .search-bar input{
+        width: 100% !important;
+    }
+
+    /* 4. Navegación en la parte inferior del header */
+    .main-nav{
+        order: 4;
+        width: 100%;
+        justify-content: center;
+        gap: 20px;
+        padding-bottom: 5px;
+    }
+
+    /* Ajustes de tamaño de fuentes y márgenes para celular */
+    .logo-text h1{
+        font-size: 1.2rem;
+    }
+    
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Aumentamos el margen para que el header más alto no tape el título */
+    .hero{
+        margin-top: 190px;
+        padding: 60px 20px;
+    }
+    
+    .hero h2{
+        font-size: 2.2rem;
+    }
+    
+    .section-line{
+        width: 80%;
+    }
+    
+    .cart-sidebar{
+        width: 100%;
+        right: -100%;
+    }
+    
     .section-title h3{
-        font-size:1.8rem;
+        font-size: 1.8rem;
     }
 }
 
 @media(max-width:480px){
+    /* Ajustes extra para teléfonos muy delgados */
+    .logo-text h1 {
+        font-size: 1rem;
+    }
+    .logo-text p {
+        display: none; /* Ocultamos "Atelier & Co." para dar más aire */
+    }
     .hero h2{
-        font-size:1.8rem;
+        font-size: 1.8rem;
     }
     .hero p{
-        font-size:0.9rem;
+        font-size: 0.9rem;
     }
     .section-title h3{
-        font-size:1.5rem;
+        font-size: 1.5rem;
     }
     .product-content h4{
-        font-size:1.1rem;
+        font-size: 1.1rem;
     }
     .price{
-        font-size:1.3rem;
+        font-size: 1.3rem;
     }
 }
